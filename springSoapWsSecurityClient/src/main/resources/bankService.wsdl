@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://service.soap.ws.spring.parthi.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://service.soap.ws.spring.parthi.com/" targetNamespace="http://service.soap.ws.spring.parthi.com/">
+  <wsdl:types>
+    <xs:schema xmlns:bank="http://service.soap.ws.spring.parthi.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://service.soap.ws.spring.parthi.com/" version="1.0">
+
+	<xs:element name="bankBranchDetailsRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element form="qualified" minOccurs="1" name="bankName" type="xs:string"/>
+				<xs:element form="qualified" minOccurs="1" name="cityName" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="bankBranchDetailsResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element form="qualified" maxOccurs="unbounded" minOccurs="0" name="bankBranchDetails" type="bank:bankDetail"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="bankDetailRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="1" name="routingNumber" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="bankDetailResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element form="qualified" maxOccurs="1" minOccurs="0" name="bankDetail" type="bank:bankDetail"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="bankDetail">
+		<xs:sequence>
+			<xs:element form="qualified" maxOccurs="1" minOccurs="1" name="bankName" type="xs:string"/>
+			<xs:element form="qualified" maxOccurs="1" minOccurs="1" name="rountingNumber" type="xs:string"/>
+			<xs:element form="qualified" maxOccurs="1" minOccurs="1" name="cityName" type="xs:string"/>
+			<xs:element form="qualified" maxOccurs="1" minOccurs="1" name="branchName" type="xs:string"/>
+			<xs:element form="qualified" maxOccurs="1" minOccurs="1" name="zipCode" type="xs:long"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="bankBranchDetailsRequest">
+    <wsdl:part element="tns:bankBranchDetailsRequest" name="bankBranchDetailsRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="bankBranchDetailsResponse">
+    <wsdl:part element="tns:bankBranchDetailsResponse" name="bankBranchDetailsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="bankDetailResponse">
+    <wsdl:part element="tns:bankDetailResponse" name="bankDetailResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="bankDetailRequest">
+    <wsdl:part element="tns:bankDetailRequest" name="bankDetailRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="bankServicePortType">
+    <wsdl:operation name="bankBranchDetails">
+      <wsdl:input message="tns:bankBranchDetailsRequest" name="bankBranchDetailsRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:bankBranchDetailsResponse" name="bankBranchDetailsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="bankDetail">
+      <wsdl:input message="tns:bankDetailRequest" name="bankDetailRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:bankDetailResponse" name="bankDetailResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="bankServicePortTypeSoap11" type="tns:bankServicePortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="bankBranchDetails">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="bankBranchDetailsRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="bankBranchDetailsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="bankDetail">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="bankDetailRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="bankDetailResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="bankService">
+    <wsdl:port binding="tns:bankServicePortTypeSoap11" name="bankServicePortTypeSoap11">
+      <soap:address location="bankService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

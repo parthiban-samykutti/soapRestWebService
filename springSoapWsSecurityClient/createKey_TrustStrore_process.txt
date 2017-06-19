@@ -1,0 +1,6 @@
+>keytool -genkey -alias service.soap.ws.spring.parthi.com -keyalg RSA -keystore springWsClientKeyStore -storepass springWsKeyStorePass -keysize 2048
+ 
+>keytool -export -keystore springWsClientKeyStore -storepass springWsKeyStorePass -alias service.soap.ws.spring.parthi.com -file springWsKeyStore.cer
+ 
+>keytool -import -trustcacerts -alias service.soap.ws.spring.parthi.com -file springWsKeyStore.cer -keystore springWsTrustStore -storepass springWsTrustStorePass
+

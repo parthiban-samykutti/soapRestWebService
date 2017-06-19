@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://service.soap.ws.spring.parthi.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://service.soap.ws.spring.parthi.com/" targetNamespace="http://service.soap.ws.spring.parthi.com/">
+  <wsdl:types>
+    <xs:schema xmlns:ac="http://service.soap.ws.spring.parthi.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://service.soap.ws.spring.parthi.com/" version="1.0">
+
+	<xs:element name="accountDetailRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element form="qualified" minOccurs="1" name="accountName" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="accountDetailResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element form="qualified" maxOccurs="1" minOccurs="0" name="accountDetail" type="ac:accountDetail"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="detailRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="1" name="accountName" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="detailResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element form="qualified" maxOccurs="1" minOccurs="0" name="accountDetail" type="ac:accountDetail"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="accountDetail">
+		<xs:sequence>
+			<xs:element form="qualified" maxOccurs="unbounded" name="accountNumbers" type="xs:long"/>
+			<xs:element form="qualified" minOccurs="1" name="accountName" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="accountDetailRequest">
+    <wsdl:part element="tns:accountDetailRequest" name="accountDetailRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="detailResponse">
+    <wsdl:part element="tns:detailResponse" name="detailResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="detailRequest">
+    <wsdl:part element="tns:detailRequest" name="detailRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="accountDetailResponse">
+    <wsdl:part element="tns:accountDetailResponse" name="accountDetailResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="accountServicePortType">
+    <wsdl:operation name="accountDetail">
+      <wsdl:input message="tns:accountDetailRequest" name="accountDetailRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:accountDetailResponse" name="accountDetailResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="detail">
+      <wsdl:input message="tns:detailRequest" name="detailRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:detailResponse" name="detailResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="accountServicePortTypeSoap11" type="tns:accountServicePortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="accountDetail">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="accountDetailRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="accountDetailResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="detail">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="detailRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="detailResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="accountService">
+    <wsdl:port binding="tns:accountServicePortTypeSoap11" name="accountServicePortTypeSoap11">
+      <soap:address location="accountService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

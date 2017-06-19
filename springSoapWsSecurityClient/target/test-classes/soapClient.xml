@@ -1,0 +1,73 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+   http://www.springframework.org/schema/beans     
+   http://www.springframework.org/schema/beans/spring-beans.xsd
+   http://www.springframework.org/schema/context 
+   http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:annotation-config />
+	<context:property-placeholder location="classpath:service.properties" />
+
+	<bean id="accountWsTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
+		<property name="defaultUri" value="${accountservice.soap.url}" />
+		<property name="marshaller" ref="marshaller" />
+		<property name="unmarshaller" ref="marshaller" />
+		<property name="interceptors">
+			<array>
+				<bean id="loggingInterceptor"
+					class="com.parthi.spring.ws.soap.service.interceptor.LoggingInterceptor" />
+			</array>
+		</property>
+	</bean>
+
+	<bean id="bankWsTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
+		<property name="defaultUri" value="${bankservice.soap.url}" />
+		<property name="marshaller" ref="marshaller" />
+		<property name="unmarshaller" ref="marshaller" />
+		<property name="interceptors">
+			<array>
+				<bean id="loggingInterceptor"
+					class="com.parthi.spring.ws.soap.service.interceptor.LoggingInterceptor" />
+			</array>
+		</property>
+	</bean>
+	
+	<bean id="marshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+		<property name="contextPath" value="com.parthi.spring.ws.soap.service" />
+	</bean>
+
+	<bean id="xwssMessageSigner" class="com.parthi.spring.ws.soap.service.interceptor.XwssMessageSigner">
+		<constructor-arg value="classpath:securityPolicy.xml" />
+		<constructor-arg>
+			<bean
+				class="org.springframework.ws.soap.security.xwss.callback.KeyStoreCallbackHandler">
+				<property name="keyStore" ref="springWsClientKeystore" />
+				<property name="defaultAlias" value="${security.key.alias}" />
+				<property name="privateKeyPassword" value="${security.key.password}" />
+			</bean>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="xwssUnamePwdAttacher" class="com.parthi.spring.ws.soap.service.interceptor.XwssUnamePwdAttacher">
+		<constructor-arg value="classpath:securityPolicy-UserPwd.xml" />
+		<constructor-arg>
+			<bean
+				class="org.springframework.ws.soap.security.xwss.callback.SimplePasswordValidationCallbackHandler">
+				<property name="users">
+					<props>
+						<prop key="parthi">parthi1</prop>
+					</props>
+				</property>
+			</bean>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="springWsClientKeystore"
+		class="org.springframework.ws.soap.security.support.KeyStoreFactoryBean">
+		<property name="location"
+			value="classpath:${security.keystore.file}" />
+		<property name="password" value="${security.keystore.password}" />
+	</bean>
+</beans>

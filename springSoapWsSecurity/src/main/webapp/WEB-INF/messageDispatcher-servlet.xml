@@ -1,0 +1,88 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ws="http://www.springframework.org/schema/web-services"
+	xsi:schemaLocation="
+   http://www.springframework.org/schema/beans     
+   http://www.springframework.org/schema/beans/spring-beans.xsd
+   http://www.springframework.org/schema/context 
+   http://www.springframework.org/schema/context/spring-context.xsd
+   http://www.springframework.org/schema/web-services 
+   http://www.springframework.org/schema/web-services/web-services.xsd">
+
+	<context:annotation-config />
+	<context:component-scan base-package="com.parthi.spring.ws.soap.service"/>
+	<ws:annotation-driven />
+	<ws:interceptors>
+		<ws:payloadRoot namespaceUri="http://service.soap.ws.spring.parthi.com/" localPart="accountDetailRequest">		
+			<ref bean="envelopeLoggingInterceptor"/>
+			<bean id="accountMessageInterceptor"
+				class="com.parthi.spring.ws.soap.interceptor.AccountMessageInterceptor" />
+			<ref bean="payLoadLoggingInterceptor"/>
+		</ws:payloadRoot>
+		
+		<ws:payloadRoot namespaceUri="http://service.soap.ws.spring.parthi.com/" localPart="detailRequest">
+			<bean id="xwsSecurityInterceptor" class="org.springframework.ws.soap.security.xwss.XwsSecurityInterceptor">
+				<property name="policyConfiguration" value="classpath:securityPolicy.xml"/>
+				<property name="callbackHandler" ref="keystoreCallbackHandler"/>
+			</bean>
+			<ref bean="envelopeLoggingInterceptor" />
+		</ws:payloadRoot>
+		
+		<ws:payloadRoot namespaceUri="http://service.soap.ws.spring.parthi.com/" localPart="bankDetailRequest">
+			<ref bean="xwsUnamePwdSecurityInterceptor"/>
+		</ws:payloadRoot>
+	</ws:interceptors>	
+
+	<bean id="keystoreCallbackHandler" class="org.springframework.ws.soap.security.xwss.callback.KeyStoreCallbackHandler">
+		<property name="trustStore" ref="trustStore"/>
+	</bean>
+	
+	<bean id="trustStore" class="org.springframework.ws.soap.security.support.KeyStoreFactoryBean">
+		<property name="location" value="classpath:springWsTrustStore"/>
+		<property name="password" value="springWsTrustStorePass"/>
+	</bean>
+	
+	<!-- userPwdCallbackHandler is not used in this application -->
+	<bean id="userPwdCallbackHandler" class="org.springframework.ws.soap.security.xwss.callback.SimpleUsernamePasswordCallbackHandler">
+		<property name="username" value="parthiban"/>
+		<property name="password" value="samykutti"/>
+	</bean>
+	
+	<bean id="passwordValidationCallbackHandler" class="org.springframework.ws.soap.security.xwss.callback.SimplePasswordValidationCallbackHandler">
+		<property name="users">
+			<props>
+				<prop key="parthi">parthi1</prop>
+				<prop key="samy">samy1</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="xwsUnamePwdSecurityInterceptor" class="org.springframework.ws.soap.security.xwss.XwsSecurityInterceptor">
+		<property name="policyConfiguration" value="classpath:securityPolicy-UserPwd.xml"/>
+		<property name="callbackHandler" ref="passwordValidationCallbackHandler"/>
+	</bean>
+	
+	<bean id="envelopeLoggingInterceptor" class="com.parthi.spring.ws.soap.interceptor.SoapEnvelopeLoggingInterceptor"/>
+	<bean id="payLoadLoggingInterceptor" class="com.parthi.spring.ws.soap.interceptor.PayloadLoggingInterceptor"/>
+	
+	<!-- dynamic-wsdl is Suitable for Development environment -->
+	<ws:dynamic-wsdl id="accountServiceWsdl" portTypeName="accountServicePortType"
+		locationUri="accountService" serviceName="accountService" targetNamespace="http://service.soap.ws.spring.parthi.com/">
+		<ws:xsd location="classpath:getAccountDetails.xsd" />
+	</ws:dynamic-wsdl>
+	
+	<ws:dynamic-wsdl id="bankServiceWsdl" portTypeName="bankServicePortType"
+		locationUri="bankService" serviceName="bankService" targetNamespace="http://service.soap.ws.spring.parthi.com/">
+		<ws:xsd location="classpath:getBankDetails.xsd" />
+	</ws:dynamic-wsdl>
+	
+	<bean id="exceptionResolver"
+		class="org.springframework.ws.soap.server.endpoint.SoapFaultMappingExceptionResolver">
+		<property name="defaultFault" value="SERVER" />
+		<property name="exceptionMappings">
+			<value>
+				org.springframework.oxm.ValidationFailureException=CLIENT,InvalidRequest
+			</value>
+		</property>
+	</bean>
+</beans>
