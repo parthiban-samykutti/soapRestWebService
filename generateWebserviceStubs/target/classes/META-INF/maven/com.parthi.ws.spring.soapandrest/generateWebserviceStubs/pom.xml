@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.parthi.ws.spring.soapandrest</groupId>
+    <artifactId>soaprest</artifactId>
+    <version>1</version>
+  </parent>
+  <artifactId>generateWebserviceStubs</artifactId>
+  <name>generatedWebserviceStubs</name>
+  <description>generate webservice java artifcats from the xsd files</description>
+  <build>
+  	<plugins>
+			<!-- JAXB xjc plugin that invokes the xjc compiler to compile XML schema 
+				into Java classes. -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>${jaxb2.maven.plugin.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<!-- The schema directory or xsd files. -->
+					<sources>
+						<source>${basedir}/src/main/resources/getAccountDetails.xsd</source>
+						<source>${basedir}/src/main/resources/getBankDetails.xsd</source>
+					</sources>
+					<!-- The package in which the source files will be generated. -->
+					<packageName>com.parthi.spring.ws.soap.vo</packageName>
+					<!-- The working directory to create the generated java source files. -->
+					<outputDirectory>${basedir}/src/main/java</outputDirectory>
+					<clearOutputDir>true</clearOutputDir>
+					<verbose>true</verbose>
+				</configuration>
+			</plugin>
+		</plugins>
+  </build>
+</project>

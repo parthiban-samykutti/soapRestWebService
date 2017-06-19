@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<j2ee:handler-chains xmlns:j2ee="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<j2ee:handler-chain>
+		<j2ee:handler>
+			<j2ee:handler-class>com.parthi.spring.ws.soap.handler.LoggingHandler</j2ee:handler-class>
+		</j2ee:handler>
+	</j2ee:handler-chain>
+</j2ee:handler-chains>

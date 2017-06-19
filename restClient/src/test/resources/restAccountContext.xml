@@ -1,0 +1,35 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+   http://www.springframework.org/schema/beans     
+   http://www.springframework.org/schema/beans/spring-beans.xsd
+   http://www.springframework.org/schema/context 
+   http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:component-scan base-package="com.parthi.spring.ws.rest" />
+	<context:annotation-config />
+	<context:property-placeholder location="classpath:service.properties" />
+	
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+		<constructor-arg ref="httpClientFactory"/>
+		<property name="errorHandler">
+			<bean class="org.springframework.web.client.DefaultResponseErrorHandler" />
+		</property>
+	</bean>
+	<bean id="httpClientFactory" class="org.springframework.http.client.HttpComponentsClientHttpRequestFactory">
+		<constructor-arg ref="httpClient"/>
+	</bean>
+	
+	<bean id="httpClient" class="org.apache.http.impl.client.HttpClients" factory-method="createSystem"/>
+	
+	<bean id="accountService" class="com.parthi.spring.ws.rest.AccountService">
+		<property name="getAccountDetailPostUrl" value="${getAccountDetail.post.url}"/>
+		<property name="getAccountDetailsGetUrl" value="${getAccountDetails.get.url}"/>
+		<property name="showDetailsGetUrl" value="${showDetails.get.url}"/>
+		<property name="getAccountDetailGetRestUrl" value="${getAccountDetail.get.rest.url}"/>
+		<property name="getAccountDetailsGetRestUrl" value="${getAccountDetails.get.rest.url}"/>
+		<property name="getAccountDetailsPostRestUrl" value="${getAccountDetails.post.rest.url}"/>
+		<property name="showDetailsGetRestUrl" value="${showDetails.get.rest.url}"/>
+	</bean>
+</beans>

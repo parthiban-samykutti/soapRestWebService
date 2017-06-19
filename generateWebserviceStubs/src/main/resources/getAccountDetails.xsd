@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xs:schema xmlns:ac="http://service.soap.ws.spring.parthi.com/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0"
+	targetNamespace="http://service.soap.ws.spring.parthi.com/">
+
+	<xs:element name="accountDetailRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="accountName" type="xs:string" form="qualified"
+					minOccurs="1"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="accountDetailResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="accountDetail" type="ac:accountDetail" form="qualified"
+					minOccurs="0" maxOccurs="1"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="detailRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="accountName" type="xs:string"
+					minOccurs="1" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="detailResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="accountDetail" type="ac:accountDetail" form="qualified"
+					minOccurs="0" maxOccurs="1"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="accountDetail">
+		<xs:sequence>
+			<xs:element name="accountNumbers" type="xs:long" form="qualified" maxOccurs="unbounded"/>
+			<xs:element name="accountName" type="xs:string" form="qualified" minOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>
