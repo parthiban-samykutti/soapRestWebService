@@ -1,0 +1,1 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><SOAP-ENV:Header/><SOAP-ENV:Body><ns2:accountDetailRequest xmlns:ns2="http://service.soap.ws.spring.parthi.com/"><ns2:accountName>parthibanSamykutti</ns2:accountName></ns2:accountDetailRequest></SOAP-ENV:Body></SOAP-ENV:Envelope>

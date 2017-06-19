@@ -1,0 +1,39 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ws="http://www.springframework.org/schema/web-services"
+	xsi:schemaLocation="
+   http://www.springframework.org/schema/beans     
+   http://www.springframework.org/schema/beans/spring-beans.xsd
+   http://www.springframework.org/schema/context 
+   http://www.springframework.org/schema/context/spring-context.xsd
+   http://www.springframework.org/schema/web-services 
+   http://www.springframework.org/schema/web-services/web-services.xsd">
+
+	<context:annotation-config />
+	<context:component-scan base-package="com.parthi.spring.ws.soap.service"/>
+	<ws:annotation-driven />
+	<ws:interceptors>
+		<ws:payloadRoot namespaceUri="http://service.soap.ws.spring.parthi.com/">		
+			<bean id="envelopeLoggingInterceptor" class="com.parthi.spring.ws.soap.interceptor.SoapEnvelopeLoggingInterceptor"/>
+			<bean id="accountMessageInterceptor"
+				class="com.parthi.spring.ws.soap.interceptor.AccountMessageInterceptor" />
+			<bean id="payLoadLoggingInterceptor" class="com.parthi.spring.ws.soap.interceptor.PayloadLoggingInterceptor"/>
+		</ws:payloadRoot>
+		
+	</ws:interceptors>
+	<!-- dynamic-wsdl is Suitable for Development environment -->
+	<ws:dynamic-wsdl id="accountServiceWsdl" portTypeName="accountServicePortType"
+		locationUri="accountService" serviceName="accountService" targetNamespace="http://service.soap.ws.spring.parthi.com/">
+		<ws:xsd location="classpath:getAccountDetails.xsd" />
+	</ws:dynamic-wsdl>
+	
+	<bean id="exceptionResolver"
+		class="org.springframework.ws.soap.server.endpoint.SoapFaultMappingExceptionResolver">
+		<property name="defaultFault" value="SERVER" />
+		<property name="exceptionMappings">
+			<value>
+				org.springframework.oxm.ValidationFailureException=CLIENT,InvalidRequest
+			</value>
+		</property>
+	</bean>
+</beans>
