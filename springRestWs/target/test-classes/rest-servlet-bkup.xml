@@ -1,0 +1,34 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+   http://www.springframework.org/schema/beans     
+   http://www.springframework.org/schema/beans/spring-beans.xsd
+   http://www.springframework.org/schema/context 
+   http://www.springframework.org/schema/context/spring-context.xsd
+   http://www.springframework.org/schema/mvc
+   http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	<context:component-scan base-package="com.parthi.spring.ws.rest.controller" />
+	<context:annotation-config />
+	<mvc:annotation-driven />
+	<context:property-placeholder location="classpath:service.properties" />
+	<mvc:default-servlet-handler />
+	
+	<bean id="accountWsTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
+		<property name="defaultUri" value="${accountservice.soap.url}"/>
+		<property name="marshaller" ref="marshaller" />
+		<property name="unmarshaller" ref="marshaller" />
+	</bean>
+	
+	<bean id="marshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+		<property name="contextPath" value="com.parthi.spring.ws.soap.service"/>
+	</bean>
+	<bean id="accountWebService" class="org.springframework.remoting.jaxws.JaxWsPortProxyFactoryBean">
+	    <property name="serviceInterface" value="com.parthi.spring.ws.soap.service.AccountService"/>
+	    <property name="wsdlDocumentUrl" value="${accountservice.soap.wsdl.url}"/>
+	    <property name="namespaceUri" value="http://service.soap.ws.spring.parthi.com/"/>
+	    <property name="serviceName" value="AccountService"/>
+	    <property name="portName" value="AccountServicePort"/>
+	</bean>
+</beans>

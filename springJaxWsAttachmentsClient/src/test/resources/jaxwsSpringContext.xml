@@ -1,0 +1,24 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd   
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context.xsd">
+	
+	<context:component-scan base-package="com.parthi.spring.ws.soap.client.service" />
+	
+	<bean id="accountService"
+		class="org.springframework.remoting.jaxws.JaxWsPortProxyFactoryBean">
+		<property name="serviceInterface" value="com.parthi.spring.ws.soap.service.AccountService" />
+		<property name="wsdlDocumentUrl"
+			value="http://localhost:8080/springJaxWsAttachments/account/getAccountDetails?wsdl" />
+		<property name="namespaceUri" value="http://service.soap.ws.spring.parthi.com/" />
+		<property name="serviceName" value="AccountService" />
+		<property name="portName" value="AccountServicePort" />
+		<property name="handlerResolver">
+			<bean name="accountHandlerResolver" class="com.parthi.spring.ws.soap.handler.AccountHandlerResolver"/>
+		</property>
+	</bean>
+</beans>

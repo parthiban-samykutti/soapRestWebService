@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is JAX-WS RI 2.2.10 svn-revision#919b322c92f13ad085a933e8dd6dd35d4947364b. --><xs:schema xmlns:tns="http://service.soap.ws.spring.parthi.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://service.soap.ws.spring.parthi.com/">
+
+<xs:element name="account" type="tns:account"/>
+
+<xs:element name="accountHolderRequest" type="tns:accountHolderRequest"/>
+
+<xs:element name="accountHolderResponse" type="tns:accountHolderResponse"/>
+
+<xs:element name="getAccountDetails" type="tns:getAccountDetails"/>
+
+<xs:element name="getAccountDetailsResponse" type="tns:getAccountDetailsResponse"/>
+
+<xs:element name="getDetail" type="tns:getDetail"/>
+
+<xs:element name="getDetailResponse" type="tns:getDetailResponse"/>
+
+<xs:complexType name="getDetail">
+<xs:sequence>
+<xs:element name="accountName" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getDetailResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:accountHolderResponse" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="accountHolderResponse">
+<xs:sequence>
+<xs:element name="accounNumbers" type="tns:account" form="qualified" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="accountName" type="xs:string" form="qualified" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="account">
+<xs:sequence>
+<xs:element name="accountNumber" type="xs:long" form="qualified"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getAccountDetails">
+<xs:sequence>
+<xs:element name="accountHolderRequest" type="tns:accountHolderRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="accountHolderRequest">
+<xs:sequence>
+<xs:element name="accountName" type="xs:string" form="qualified" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getAccountDetailsResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:accountHolderResponse" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
