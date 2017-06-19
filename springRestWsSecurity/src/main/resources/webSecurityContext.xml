@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="
+		 http://www.springframework.org/schema/beans
+	     http://www.springframework.org/schema/beans/spring-beans.xsd
+	     http://www.springframework.org/schema/context
+	     http://www.springframework.org/schema/context/spring-context.xsd
+		 http://www.springframework.org/schema/security
+		 http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<beans profile="secure">
+		<context:property-placeholder
+			local-override="true" ignore-resource-not-found="true" />
+		<context:component-scan base-package="com.parthi.spring.ws.rest" />
+		<context:annotation-config />
+
+		<security:http use-expressions="true"
+			entry-point-ref="restAuthenticationEntryPoint" create-session="never"
+			name="serviceSecurity">
+			<security:custom-filter position="PRE_AUTH_FILTER"
+				ref="preAuthFilter" />
+			<security:intercept-url pattern="/**"
+				access="isAuthenticated() and hasAuthority('AUTH_USER')" />
+		</security:http>
+
+		<bean id="preAuthFilter"
+			class="com.parthi.spring.ws.rest.auth.PreAuthFilter">
+			<property name="authenticationManager" ref="authenticationManager" />
+			<property name="checkForPrincipalChanges" value="true" />
+		</bean>
+
+		<security:authentication-manager alias="authenticationManager">
+			<security:authentication-provider ref="authenticationProvider" />
+		</security:authentication-manager>
+
+		<bean id="authenticationProvider"
+			class="com.parthi.spring.ws.rest.auth.SpringSecurityAuthenticationProvider">
+			<property name="userDetailsService" ref="userDetailsService"></property>
+		</bean>
+
+		<bean
+			class="com.parthi.spring.ws.rest.auth.SpringSecurityUserDetailsService"
+			id="userDetailsService" />
+	</beans>
+	
+	<beans profile="insecure">
+		<bean id="springSecurityFilterChain"
+			class="com.parthi.spring.security.authorization.InsecureFilterChain" />
+	</beans>
+</beans>
